@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <a href="javascript:sendMessage()">send</a>
+        <input type="text" id="msg" value=""/>
+        <div id="messages" style="height:200px;background:black;color:white;"></div>
+        <script type="text/javascript">
+            function guid() {
+                function s4() {
+                    return Math.floor((1 + Math.random()) * 0x10000)
+                    .toString(16)
+                    .substring(1);
+                }
+                
+                return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                    s4() + '-' + s4() + s4() + s4();
+            }
+            
+            
+            var ws = new WebSocket("ws://localhost:8888/ws?Id=" + guid());
+            sendMessage = function() {
+                ws.send(document.getElementById('msg').value);
+                document.getElementById('msg').value = '';
+            }
+
+            ws.onmessage = function (evt) {
+                console.log('on message')
+                var received_msg = evt.data;
+                var messageContainer = document.getElementById("messages");
+                messageContainer.appendChild(document.createElement('hr'));
+                messageContainer.innerHTML += '\n' + received_msg;
+            };
+
+            ws.onclose = function() { 
+                messageContainer.innerHTML = "Connection is closed...";
+            };
+        </script>
+    </body>
+</html>
