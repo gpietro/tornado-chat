@@ -1,2 +1,2 @@
 # tornado-chat
-Dummy chat
+A dummy chat to get started with Tornado framework.
